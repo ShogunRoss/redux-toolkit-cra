@@ -2,13 +2,9 @@ import React from 'react';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { lazyLoad } from 'utils/loadable';
-
-// import FirstPage from 'pages/FirstPage';
-// import SecondPage from 'pages/SecondPage';
-// import ThirdPage from 'pages/ThirdPage';
+import { getStore } from 'redux/store';
 
 import './index.css';
-import { getStore } from 'redux/store';
 
 const store = getStore();
 
@@ -25,15 +21,15 @@ const FirstPage = lazyLoad(() =>
     return module;
   }),
 );
-const SecondPage = lazyLoad(() => import('pages/SecondPage')).then(
-  async (module) => {
+const SecondPage = lazyLoad(() =>
+  import('pages/SecondPage').then(async (module) => {
     const { default: reducer, sliceKey } = await import(
       'pages/FirstPage/slice'
     );
 
     store.injectReducer(sliceKey, reducer);
     return module;
-  },
+  }),
 );
 const ThirdPage = lazyLoad(() => import('pages/ThirdPage'));
 
